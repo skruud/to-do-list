@@ -8,6 +8,7 @@ import About from './components/pages/About';
 
 import './App.css';
 import axios from 'axios';
+//import {API} from 'aws-amplify';
 
 class App extends Component {
   state = {
@@ -16,34 +17,48 @@ class App extends Component {
 
   componentDidMount() {
     axios
-      .get('https://3x6d27ojt7.execute-api.us-east-1.amazonaws.com/default')
-      .then(res => this.setState({ todolist: res.data }));
+      .get('https://6zm55pojjf.execute-api.eu-north-1.amazonaws.com/dev/todos')
+      .then(res => this.setState(
+        { todolist:  (res.data)  },
+        console.log( (res.data) )
+        ));
   }
 
   changeCompletion = (id) => {
-    this.setState({ 
-      todolist: this.state.todolist.map(todoItem => {
-        if (todoItem.id === id) {
-          todoItem.completed = !todoItem.completed;
-        }
-        return todoItem;
-      })
-    });
+    axios
+      .put(`https://6zm55pojjf.execute-api.eu-north-1.amazonaws.com/dev/todos/${id}`, {complete: true})
+      .then(res => 
+        this.setState(
+          { todolist: this.state.todolist.map(todoItem => {
+            if (todoItem.id === id) {
+              todoItem.completed = !todoItem.completed;
+            }
+            return todoItem;
+          })
+        }));
+    
   };
 
   deleteTodoItem = (id) => {
     axios
-      .delete(`https://3x6d27ojt7.execute-api.us-east-1.amazonaws.com/default`)
+      .delete(`https://6zm55pojjf.execute-api.eu-north-1.amazonaws.com/dev/todos/${id}`)
       .then(res => 
-        this.setState({ todolist: [...this.state.todolist.filter(todoItem => todoItem.id !== id)] }) 
+        this.setState(
+          { todolist: this.state.todolist.filter(todoItem => todoItem.id !== id) },
+          console.log(res)
+          ) 
       );
   };
 
   addTodoItem = (title) => {
+    console.log(title)
     axios
-      .post('https://3x6d27ojt7.execute-api.us-east-1.amazonaws.com/default', {title: title, completed: false })
+      .post('https://6zm55pojjf.execute-api.eu-north-1.amazonaws.com/dev/todos', {title: title })
       .then(res => 
-        this.setState({ todolist: [...this.state.todolist, res.data] }) );
+        this.setState(
+          { todolist: [...this.state.todolist, res.data ] },
+          console.log(res.data)
+          ) );
     
   };
 
