@@ -25,13 +25,20 @@ class App extends Component {
   }
 
   changeCompletion = (id) => {
+    var completed;
+    this.state.todolist.map(todoItem => {
+      if (todoItem.id === id) {
+        completed = !todoItem.complete;
+      }
+      return todoItem;
+    })
     axios
-      .put(`https://6zm55pojjf.execute-api.eu-north-1.amazonaws.com/dev/todos/${id}`, {complete: true})
+      .put(`https://6zm55pojjf.execute-api.eu-north-1.amazonaws.com/dev/todos/${id}`, {complete: completed})
       .then(res => 
         this.setState(
           { todolist: this.state.todolist.map(todoItem => {
             if (todoItem.id === id) {
-              todoItem.completed = !todoItem.completed;
+              todoItem.complete = !todoItem.complete;
             }
             return todoItem;
           })
