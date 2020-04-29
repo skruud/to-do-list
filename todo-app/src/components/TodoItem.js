@@ -9,16 +9,26 @@ export class TodoItem extends Component {
       padding: '5px',
       borderBottom: '2px #bbb dotted',
       textDecoration: this.props.todoItem.complete ?
-      'line-through' : 'none'
+      'line-through' : 'none',
+      fontSize: '20px'
     }
   }
+
+  getCheckStyle = () => {
+    return {
+      opacity: '100',
+      height: '18px',
+      width: '18px'
+    }
+  }
+  
 
   render() {
     const { title, id, complete } = this.props.todoItem;
     return (
       <div style={this.getStyle()}>
         <p>
-          <input type="checkbox" defaultChecked={complete} onChange={this.props.changeCompletion.bind(this, id)} /> {" "}
+          <input type="checkbox" defaultChecked={complete} onChange={this.props.changeCompletion.bind(this, id)} style={this.getCheckStyle()} /> {" "}
           { title }
           <button onClick={this.props.deleteTodoItem.bind(this, id)} style={buttonStyle}>X</button>
         </p>
